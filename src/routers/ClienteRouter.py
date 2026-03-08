@@ -1,4 +1,4 @@
-# Autora: Letícia Stefanie Maciel Silva
+#Letícia Stefanie Maciel Silva
 
 from fastapi import APIRouter
 from domain.entities.Cliente import Cliente
