@@ -1,9 +1,9 @@
+#Letícia Stefanie Maciel Silva
+
 from pydantic import BaseModel
 
 class Cliente(BaseModel):
     id_cliente: int = None
     nome: str
     cpf: str
-    telefone: str
-
-    #LETÍCIA STEFANIE MACIEL SILVA
+    telefone: str = None

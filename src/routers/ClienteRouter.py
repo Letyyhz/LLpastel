@@ -1,25 +1,34 @@
+# Autora: Letícia Stefanie Maciel Silva
+
 from fastapi import APIRouter
 from domain.entities.Cliente import Cliente
+
 router = APIRouter()
-# Criar as rotas/endpoints: GET, POST, PUT, DELETE
-@router.get("/cliente/", tags=["Cliente"], status_code=200)
+
+@router.get("/cliente/", tags=["Cliente"])
 def get_cliente():
     return {"msg": "cliente get todos executado"}
 
-@router.get("/cliente/{id}", tags=["Cliente"], status_code=200)
-def get_cliente(id: int):
-    return {"msg": "cliente get um executado"}
+@router.get("/cliente/{id}", tags=["Cliente"])
+def get_cliente_id(id: int):
+    return {"msg": "cliente get um executado", "id": id}
 
-@router.post("/cliente/", tags=["Cliente"], status_code=200)
+@router.post("/cliente/", tags=["Cliente"])
 def post_cliente(corpo: Cliente):
-    return {"msg": "cliente post executado", "nome": corpo.nome, "cpf": corpo.cpf, "telefone": corpo.telefone}
+    return {
+        "msg": "cliente criado",
+        "nome": corpo.nome,
+        "cpf": corpo.cpf
+    }
 
-@router.put("/cliente/{id}", tags=["Cliente"], status_code=200)
+@router.put("/cliente/{id}", tags=["Cliente"])
 def put_cliente(id: int, corpo: Cliente):
-    return {"msg": "cliente put executado", "id":id, "nome": corpo.nome, "cpf": corpo.cpf, "telefone": corpo.telefone}
+    return {
+        "msg": "cliente atualizado",
+        "id": id,
+        "nome": corpo.nome
+    }
 
-@router.delete("/cliente/{id}", tags=["Cliente"], status_code=200)
+@router.delete("/cliente/{id}", tags=["Cliente"])
 def delete_cliente(id: int):
-    return {"msg": "cliente delete executado", "id":id}
-
-#LETÍCIA STEFANIE MACIEL SILVA
+    return {"msg": "cliente deletado", "id": id}

@@ -1,3 +1,5 @@
+#Letícia Stefanie Maciel Silva
+
 from pydantic import BaseModel
 
 class Funcionario(BaseModel):
@@ -8,5 +10,3 @@ class Funcionario(BaseModel):
     telefone: str = None
     grupo: int
     senha: str = None
-
-    #LETÍCIA STEFANIE MACIEL SILVA
