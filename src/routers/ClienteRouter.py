@@ -1,7 +1,7 @@
 #Letícia Stefanie Maciel Silva
 
 from fastapi import APIRouter
-from domain.schemas.ClienteSchema import Cliente
+from domain.schemas.ClienteSchema import ClienteCreate, ClienteUpdate, ClienteResponse
 
 router = APIRouter()
 
@@ -14,7 +14,7 @@ def get_cliente_id(id: int):
     return {"msg": "cliente get um executado", "id": id}
 
 @router.post("/cliente/", tags=["Cliente"])
-def post_cliente(corpo: Cliente):
+def post_cliente(corpo: ClienteCreate):
     return {
         "msg": "cliente criado",
         "nome": corpo.nome,
@@ -22,7 +22,7 @@ def post_cliente(corpo: Cliente):
     }
 
 @router.put("/cliente/{id}", tags=["Cliente"])
-def put_cliente(id: int, corpo: Cliente):
+def put_cliente(id: int, corpo: ClienteUpdate):
     return {
         "msg": "cliente atualizado",
         "id": id,
