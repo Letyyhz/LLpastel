@@ -1,7 +1,7 @@
 #Letícia Stefanie Maciel Silva
 
 from fastapi import APIRouter
-from domain.entities.Produto import Produto
+from domain.schemas.ProdutoSchema import Produto
 
 router = APIRouter()
 

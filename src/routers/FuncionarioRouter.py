@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from domain.entities.Funcionario import Funcionario
+from domain.schemas.FuncionarioSchema import Funcionario
 router = APIRouter()
 
 # Criar as rotas/endpoints: GET, POST, PUT, DELETE
