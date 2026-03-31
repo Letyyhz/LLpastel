@@ -1,4 +1,5 @@
-#Letícia Stefanie Maciel Silva
+#LELE
+
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
@@ -27,3 +28,5 @@ class ProdutoPublicResponse(BaseModel):
     nome: str
     descricao: str
     foto: bytes
+    
+    
