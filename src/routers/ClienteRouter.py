@@ -1,4 +1,5 @@
 #LETÍCIA STEFANIE MACIEL SILVA
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
@@ -10,15 +11,19 @@ from domain.schemas.ClienteSchema import (
     ClienteResponse
 )
 
+from domain.schemas.AuthSchema import FuncionarioAuth
+
 # Infra
 from infra.orm.ClienteModel import ClienteDB
 from infra.database import get_db
+
+from infra.dependencies import get_current_active_user, require_group
 
 router = APIRouter()
 
 
 @router.get("/cliente/", response_model=List[ClienteResponse], tags=["Cliente"], status_code=status.HTTP_200_OK)
-async def get_clientes(db: Session = Depends(get_db)):
+async def get_clientes(db: Session = Depends(get_db), current_user: FuncionarioAuth = Depends(get_current_active_user)):
     """Retorna todos os clientes"""
     try:
         clientes = db.query(ClienteDB).all()
@@ -31,7 +36,7 @@ async def get_clientes(db: Session = Depends(get_db)):
 
 
 @router.get("/cliente/{id}", response_model=ClienteResponse, tags=["Cliente"], status_code=status.HTTP_200_OK)
-async def get_cliente(id: int, db: Session = Depends(get_db)):
+async def get_cliente(id: int, db: Session = Depends(get_db),  current_user: FuncionarioAuth = Depends(get_current_active_user)):
     """Retorna um cliente pelo ID"""
     try:
         cliente = db.query(ClienteDB).filter(ClienteDB.id == id).first()
@@ -54,7 +59,7 @@ async def get_cliente(id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/cliente/", response_model=ClienteResponse, status_code=status.HTTP_201_CREATED, tags=["Cliente"])
-async def post_cliente(cliente_data: ClienteCreate, db: Session = Depends(get_db)):
+async def post_cliente(cliente_data: ClienteCreate, db: Session = Depends(get_db), current_user: FuncionarioAuth = Depends(require_group([1,3]))):
     """Cria um novo cliente"""
     try:
         # Verifica CPF duplicado
@@ -92,7 +97,7 @@ async def post_cliente(cliente_data: ClienteCreate, db: Session = Depends(get_db
 
 
 @router.put("/cliente/{id}", response_model=ClienteResponse, tags=["Cliente"], status_code=status.HTTP_200_OK)
-async def put_cliente(id: int, cliente_data: ClienteUpdate, db: Session = Depends(get_db)):
+async def put_cliente(id: int, cliente_data: ClienteUpdate, db: Session = Depends(get_db), current_user: FuncionarioAuth = Depends(require_group([1,3]))):
     """Atualiza um cliente"""
     try:
         cliente = db.query(ClienteDB).filter(ClienteDB.id == id).first()
@@ -137,7 +142,7 @@ async def put_cliente(id: int, cliente_data: ClienteUpdate, db: Session = Depend
 
 
 @router.delete("/cliente/{id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Cliente"], summary="Remover cliente")
-async def delete_cliente(id: int, db: Session = Depends(get_db)):
+async def delete_cliente(id: int, db: Session = Depends(get_db),current_user: FuncionarioAuth = Depends(require_group([1]))):
     """Remove um cliente"""
     try:
         cliente = db.query(ClienteDB).filter(ClienteDB.id == id).first()
