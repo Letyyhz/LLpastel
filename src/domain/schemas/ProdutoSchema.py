@@ -17,6 +17,7 @@ class ProdutoUpdate(BaseModel):
 
 class ProdutoResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+    
     id: int
     nome: str
     descricao: str
@@ -25,8 +26,7 @@ class ProdutoResponse(BaseModel):
 
 class ProdutoPublicResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+    
     nome: str
     descricao: str
     foto: bytes
-    
-    
