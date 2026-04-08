@@ -1,3 +1,4 @@
+#LETÍCIA STEFANIE MACIEL SILVA
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
@@ -13,21 +14,24 @@ security = HTTPBearer()
 
 # Dependency para validar token e retornar usuário atual
 def get_current_user(
-        credentials: HTTPAuthorizationCredentials = Depends(security),
-        db: Session = Depends(get_db)
-    ) -> FuncionarioAuth:
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db)
+) -> FuncionarioAuth:
     """Dependency que valida o token e retorna o usuário atual"""
-    # Extrai e valida o token
 
+    # Extrai e valida o token
     payload = verify_access_token(credentials.credentials)
     cpf: str = payload.get("sub")
     id_funcionario: int = payload.get("id")
+
     if cpf is None or id_funcionario is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido - dados incompletos", headers={"WWW-Authenticate": "Bearer"},
         )
+    
     # Busca o funcionário no banco
     funcionario = db.query(FuncionarioDB).filter(FuncionarioDB.id == id_funcionario).first()
+
     if not funcionario:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Funcionário não encontrado", headers={"WWW-Authenticate": "Bearer"},
@@ -67,7 +71,7 @@ def require_group(group_required: list[int] = None):
         Dependency function para uso em rotas
     """
     def check_group(current_user: FuncionarioAuth = Depends(get_current_active_user)) -> FuncionarioAuth:
-    # Se group_required for None, permite qualquer usuário autenticado
+        # Se group_required for None, permite qualquer usuário autenticado
         if group_required is None:
             return current_user
         
@@ -80,15 +84,15 @@ def require_group(group_required: list[int] = None):
         return current_user
     return check_group
 
-    # Exemplos de uso:
-    # @router.get("/admin/dashboard")
-    # async def admin_dashboard(current_user: FuncionarioAuth = Depends(require_group([1]))):
-    # # Apenas grupo 1 (admin)
-    #
-    # @router.get("/shared/reports")
-    # async def shared_reports(current_user: FuncionarioAuth = Depends(require_group([1, 3]))):
-    # # Grupo 1 ou 3
-    #
-    # @router.get("/user/profile")
-    # async def user_profile(current_user: FuncionarioAuth = Depends(require_group(None))):
-    # # Qualquer usuário autenticado
+# Exemplos de uso:
+# @router.get("/admin/dashboard")
+# async def admin_dashboard(current_user: FuncionarioAuth = Depends(require_group([1]))):
+# # Apenas grupo 1 (admin)
+#
+# @router.get("/shared/reports")
+# async def shared_reports(current_user: FuncionarioAuth = Depends(require_group([1, 3]))):
+# # Grupo 1 ou 3
+#
+# @router.get("/user/profile")
+# async def user_profile(current_user: FuncionarioAuth = Depends(require_group(None))):
+# # Qualquer usuário autenticado

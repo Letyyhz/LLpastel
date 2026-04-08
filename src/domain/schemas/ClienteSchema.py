@@ -1,4 +1,4 @@
-#Letícia Stefanie Maciel Silva
+#LETÍCIA STEFANIE MACIEL SILVA
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 

@@ -7,13 +7,17 @@ from sqlalchemy.orm import Session
 
 # cria o engine do banco de dados
 engine = create_engine(STR_DATABASE, echo=True)
+
 # cria a sessão do banco de dados
-Session = sessionmaker(bind=engine, autocommit=False, autoflush=True)
+Session = sessionmaker(bind=engine, autocommit=False, autoflush=True) #autoflush eh tipo um refresh
+
 # para trabalhar com tabelas
 Base = declarative_base()
+
 # cria, caso não existam, as tabelas de todos os modelos que encontrar na aplicação (importados)
 async def cria_tabelas():
     Base.metadata.create_all(engine)
+
 # dependência para injetar a sessão do banco de dados nas rotas
 def get_db():
     db_session = Session()
