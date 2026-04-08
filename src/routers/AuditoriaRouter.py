@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from typing import List, Optional
 from datetime import datetime
-
 from domain.schemas.AuditoriaSchema import AuditoriaResponse
 from domain.schemas.AuthSchema import FuncionarioAuth
 from infra.orm.AuditoriaModel import AuditoriaDB
@@ -34,11 +33,10 @@ async def listar_auditoria(
     try:
         # Construir query base com joins manuais
         query = db.query(AuditoriaDB, FuncionarioDB).join(FuncionarioDB, FuncionarioDB.id == AuditoriaDB.funcionario_id)
-
         # Aplicar filtros
         if funcionario_id:
             query = query.filter(AuditoriaDB.funcionario_id == funcionario_id)
-
+            
         if acao:
             acoes_list = [a.strip().upper() for a in acao.split(',')]
             query = query.filter(AuditoriaDB.acao.in_(acoes_list))
@@ -53,6 +51,7 @@ async def listar_auditoria(
                 query = query.filter(AuditoriaDB.data_hora >= data_inicio_dt)
             except ValueError:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data início inválida. Use formato YYYY-MM-DD")
+            
         if data_fim:
             try:
                 data_fim_dt = datetime.strptime(data_fim, "%Y-%m-%d")
@@ -62,10 +61,8 @@ async def listar_auditoria(
             
         # Contar total para metadata
         total_count = query.count()
-
         # Ordenar por data descendente, aplicar paginação e limitar
         auditorias = query.order_by(desc(AuditoriaDB.data_hora)).offset(skip).limit(limite).all()
-
         # Montar response
         result = []
         for auditoria, funcionario in auditorias:
@@ -82,6 +79,7 @@ async def listar_auditoria(
         raise
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Erro ao listar auditoria: {str(e)}")
+    
 
 @router.get("/auditoria/acoes", tags=["Auditoria"], summary="Listar tipos de ações disponíveis para filtro - protegida por JWT e grupo 1")
 @limiter.limit(get_rate_limit("light"))
@@ -97,7 +95,7 @@ async def listar_acoes_disponiveis(
         # Buscar ações e recursos distintos no banco de dados
         acoes_db = db.query(AuditoriaDB.acao).distinct().all()
         recursos_db = db.query(AuditoriaDB.recurso).distinct().all()
-
+        
         # Montar response com dados reais do banco
         return {
             "acoes": [
@@ -109,8 +107,9 @@ async def listar_acoes_disponiveis(
                 for recurso in recursos_db
             ]
         }
+    
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erro ao listar ações e recursos: {str(e)}"
-    )
+        )

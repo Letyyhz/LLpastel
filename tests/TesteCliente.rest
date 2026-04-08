@@ -1,10 +1,28 @@
-#Letícia Stefanie Maciel Silva 
-### Verbo GET – listar todos GET http://localhost:8000/cliente/ HTTP/1.1 ### Verbo GET – listar um GET http://localhost:8000/cliente/10 HTTP/1.1 ### Verbo POST – adicionar POST http://127.0.0.1:8000/cliente/ HTTP/1.1 Content-Type: application/json
+### Verbo GET – listar todos
+GET http://localhost:8000/cliente/ HTTP/1.1
+
+### Verbo GET – listar um
+GET http://localhost:8000/cliente/12 HTTP/1.1
+
+### Verbo POST – adicionar
+POST http://localhost:8000/cliente/ HTTP/1.1
+content-Type: application/json
 
 {
-"nome": "LETICIA STEFANIE", "cpf": "01236234995", "telefone": "49991864053"
-} ### Verbo PUT – atualiza PUT http://127.0.0.1:8000/cliente/2 HTTP/1.1 Content-Type: application/json
+  "nome": "Letícia Stefanie Maciel Silva",
+  "cpf": "12345678900",
+  "telefone": "48999112233"
+}
+
+### Verbo PUT – atualiza
+PUT http://localhost:8000/cliente/12 HTTP/1.1
+content-Type: application/json
 
 {
-"nome": "LETICIA Atualizadinho", "cpf": "01236234995", "telefone": "49991864053"
-} ### Verbo DELETE - excluir DELETE http://127.0.0.1:8000/cliente/3 HTTP/1.1
+  "nome": "Letícia S. M. Silva",
+  "cpf": "12345678900",
+  "telefone": "48999887766"
+}
+
+### Verbo DELETE - excluir
+DELETE http://localhost:8000/cliente/12 HTTP/1.1

@@ -16,7 +16,7 @@ async def health_check():
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "service": "comandas-api",
         "version": "1.0.0"
-}
+    }
 
 # Health check do banco de dados - Verifica conexão com banco de dados - Testa se consegue executar query simples
 @router.get("/health/database", tags=["Health"], summary="Health check do banco de dados - Verifica conexão com banco de dados - Testa se consegue executar query simples")
@@ -30,7 +30,7 @@ async def database_health():
                 "status": "healthy",
                 "database": "connected",
                 "timestamp": datetime.now(timezone.utc).isoformat()
-        }
+            }
         else:
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -58,19 +58,21 @@ async def database_tables_health():
         try:
             count = db.query(FuncionarioDB).count()
             checks["funcionarios"] = {
-                "status": "healthy",
-                "count": count
-            }
+            "status": "healthy",
+            "count": count
+        }
         except Exception as e:
             checks["funcionarios"] = {
-                "status": "error",
-                "error": str(e)
-            }
+            "status": "error",
+            "error": str(e)
+        }
+            
         # Verifica se todas estão healthy
         all_healthy = all(
             check["status"] == "healthy"
             for check in checks.values()
         )
+
         return {
             "status": "healthy" if all_healthy else "unhealthy",
             "tables": checks,
@@ -80,7 +82,7 @@ async def database_tables_health():
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=f"Database tables check failed: {str(e)}"
-    )
+        )
     finally:
         try:
             db.close()
@@ -109,8 +111,8 @@ async def system_health():
             "free": disk.free,
             "percent": (disk.used / disk.total) * 100,
             "status": "healthy" if (disk.used / disk.total) * 100 < 90 else "warning"
-
         }
+
         # Informações de CPU
         cpu_percent = psutil.cpu_percent(interval=1)
         cpu_info = {
@@ -121,9 +123,9 @@ async def system_health():
 
         # Status geral
         all_healthy = all([
-            memory_info["status"] == "healthy",
-            disk_info["status"] == "healthy",
-            cpu_info["status"] == "healthy"
+        memory_info["status"] == "healthy",
+        disk_info["status"] == "healthy",
+        cpu_info["status"] == "healthy"
         ])
 
         return {
@@ -133,22 +135,21 @@ async def system_health():
             "cpu": cpu_info,
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
+    
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=f"System health check failed: {str(e)}"
         )
-
+    
 # Health check completo - Verificação completa de todos os componentes
 @router.get("/health/full", tags=["Health"], summary="Health check completo - Verificação completa de todos os componentes")
 async def full_health_check():
     try:
         # Coleta todos os health checks
         checks = {}
-
         # API Status
         checks["api"] = {"status": "healthy", "message": "API responding"}
-
         # Database Status
         try:
             db = next(get_db())
@@ -158,18 +159,16 @@ async def full_health_check():
         except Exception as e:
             checks["database"] = {"status": "unhealthy", "message": str(e)}
 
-        # System Status
+            # System Status
         try:
             memory = psutil.virtual_memory()
             disk = psutil.disk_usage('.') # Diretório atual
             cpu = psutil.cpu_percent(interval=1)
-
             system_healthy = (memory.percent < 90 and (disk.used / disk.total) * 100 < 90 and cpu < 80)
-
             checks["system"] = {"status": "healthy" if system_healthy else "warning", "memory_percent": memory.percent, "disk_percent": (disk.used / disk.total) * 100, "cpu_percent": cpu}
         except Exception as e:
             checks["system"] = {"status": "error", "message": str(e)}
-
+        
         # Status geral
         overall_status = "healthy"
         for check in checks.values():
@@ -181,7 +180,7 @@ async def full_health_check():
             elif check["status"] == "error":
                 overall_status = "unhealthy"
                 break
-    
+
         return {"status": overall_status, "checks": checks, "timestamp": datetime.now(timezone.utc).isoformat(), "service": "comandas-api", "version": "1.0.0"}
     
     except Exception as e:
@@ -197,9 +196,10 @@ async def readiness_check():
         db.close()
     except Exception as e:
         raise HTTPException(
-        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-        detail=f"Service not ready - database unavailable: {str(e)}"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Service not ready - database unavailable: {str(e)}"
         )
+    
     return {
         "status": "ready",
         "timestamp": datetime.now(timezone.utc).isoformat()

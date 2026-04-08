@@ -14,6 +14,7 @@ class ClienteUpdate(BaseModel):
 
 class ClienteResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+    
     id: int
     nome: str
     cpf: str

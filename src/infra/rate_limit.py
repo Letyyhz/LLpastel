@@ -29,10 +29,11 @@ def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded) -> Res
         retry_after = 86400 # 1 dia
     else:
         retry_after = 60 # padrão: 1 minuto
+    
     response = Response(content=f'{{"error": "Rate limit exceeded", "message": "Too many requests. Limit: {exc.detail}", "retry_after": {retry_after}, "timestamp": "{datetime.now(timezone.utc).isoformat()}"}}', status_code=429,
 media_type="application/json")
     
-# Adiciona headers informativos
+    # Adiciona headers informativos
     response.headers["X-RateLimit-Limit"] = str(exc.detail)
     response.headers["X-RateLimit-Remaining"] = "0"
     response.headers["X-RateLimit-Reset"] = str(int(datetime.now(timezone.utc).timestamp()) + retry_after)

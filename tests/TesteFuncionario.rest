@@ -1,6 +1,34 @@
-#Letícia Stefanie Maciel Silva 
-### Verbo GET – listar todos GET http://localhost:8000/funcionario/ HTTP/1.1 ### Verbo GET – listar um GET http://localhost:8000/funcionario/10 HTTP/1.1 ### Verbo POST – adicionar POST http://127.0.0.1:8000/funcionario/ HTTP/1.1 Content-Type: application/json
+### Verbo GET – listar todos
+GET http://localhost:8000/funcionario/ HTTP/1.1
 
-{ "nome" : "LETICIA STEFANIE", "matricula" : "12345", "cpf" : "01236234995", "telefone" : "49991864053", "grupo" : 1, "senha" : "abcbolinhas" } ### Verbo PUT – atualiza PUT http://127.0.0.1:8000/funcionario/2 HTTP/1.1 Content-Type: application/json
+### Verbo GET – listar um
+GET http://localhost:8000/funcionario/15 HTTP/1.1
 
-{ "nome" : "LETICIA STEFANIE", "matricula" : "12345", "cpf" : "01236234995", "telefone" : "49991864053", "grupo" : 1, "senha" : "abcbolinhas" } ### Verbo DELETE - excluir DELETE http://127.0.0.1:8000/funcionario/3 HTTP/1.1
+### Verbo POST – adicionar
+POST http://localhost:8000/funcionario/ HTTP/1.1
+content-Type: application/json
+
+{
+  "nome": "Letícia Stefanie Maciel Silva",
+  "matricula": "2026001",
+  "cpf": "12345678900",
+  "telefone": "48999112233",
+  "grupo": 1,
+  "senha": "123456"
+}
+
+### Verbo PUT – atualiza
+PUT http://localhost:8000/funcionario/15 HTTP/1.1
+content-Type: application/json
+
+{
+  "nome": "Letícia Stefanie Maciel Silva",
+  "matricula": "2026001",
+  "cpf": "12345678900",
+  "telefone": "48999887766",
+  "grupo": 1,
+  "senha": "123456"
+}
+
+### Verbo DELETE - excluir
+DELETE http://localhost:8000/funcionario/15 HTTP/1.1
