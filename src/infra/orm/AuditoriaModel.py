@@ -5,7 +5,7 @@ from infra.database import Base
 class AuditoriaDB(Base):
     """Modelo para registrar auditoria de acessos e ações"""
     __tablename__ = "tb_auditoria"
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     funcionario_id = Column(Integer, ForeignKey("tb_funcionario.id", ondelete="RESTRICT"), nullable=False)
     acao = Column(String(50), nullable=False) # LOGIN, LOGOUT, CREATE, UPDATE, DELETE, CANCEL, etc.

@@ -29,8 +29,3 @@ class ProdutoPublicResponse(BaseModel):
     nome: str
     descricao: str
     foto: bytes
-class ProdutoResponsePublico(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    nome: str
-    descricao: str
-    foto: bytes
