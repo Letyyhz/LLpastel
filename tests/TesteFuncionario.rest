@@ -1,0 +1,34 @@
+### Verbo GET – listar todos
+GET http://localhost:8000/funcionario/ HTTP/1.1
+
+### Verbo GET – listar um
+GET http://localhost:8000/funcionario/15 HTTP/1.1
+
+### Verbo POST – adicionar
+POST http://localhost:8000/funcionario/ HTTP/1.1
+content-Type: application/json
+
+{
+  "nome": "Letícia Stefanie Maciel Silva",
+  "matricula": "2026001",
+  "cpf": "12345678900",
+  "telefone": "48999112233",
+  "grupo": 1,
+  "senha": "123456"
+}
+
+### Verbo PUT – atualiza
+PUT http://localhost:8000/funcionario/15 HTTP/1.1
+content-Type: application/json
+
+{
+  "nome": "Letícia Stefanie Maciel Silva",
+  "matricula": "2026001",
+  "cpf": "12345678900",
+  "telefone": "48999887766",
+  "grupo": 1,
+  "senha": "123456"
+}
+
+### Verbo DELETE - excluir
+DELETE http://localhost:8000/funcionario/15 HTTP/1.1
